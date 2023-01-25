@@ -3,16 +3,17 @@ import getopt
 import os
 import json
 
+avail_engines = ['solid', 'cadquery'] # 'solid' = solid python / OpenSCAD, 'cadquery' = cadquery / OpenCascade
+
+engine = os.getenv("ENGINE") # None if not set
+engine = engine if engine in avail_engines else "solid" 
 
 pi = 3.14159
 d2r = pi / 180
 r2d = 180 / pi
 
 shape_config = {
-
-    'ENGINE': 'solid',  # 'solid' = solid python / OpenSCAD, 'cadquery' = cadquery / OpenCascade
-    # 'ENGINE': 'cadquery',  # 'solid' = solid python / OpenSCAD, 'cadquery' = cadquery / OpenCascade
-
+    'ENGINE': engine,
 
     ######################
     ## Shape parameters ##
@@ -274,30 +275,30 @@ shape_config = {
     # 'CLIP' = Features to set the OLED in a frame a snap a bezel down to hold it in place.
 
     'oled_mount_type':  'CLIP',
-    'oled_center_row': 1.25, # if not None, this will override the oled_mount_location_xyz and oled_mount_rotation_xyz settings
+    'oled_center_row': 1, # if not None, this will override the oled_mount_location_xyz and oled_mount_rotation_xyz settings
     'oled_translation_offset': (0, 0, 4), # Z offset tweaks are expected depending on curvature and OLED mount choice.
-    'oled_rotation_offset': (0, 0, 0),
+    'oled_rotation_offset': (-15, -25, 95),
 
     'oled_configurations': {
         'CLIP': {
             # Common parameters
             'oled_mount_height': 34 + 0.2,  # whole OLED length
             'oled_mount_width': 36 + 0.2,  # whole OLED width
-            'oled_mount_rim': 2.0,
-            'oled_mount_depth': 7.0,
+            'oled_mount_rim': 1.5,
+            'oled_mount_depth': 15.0,
             'oled_mount_cut_depth': 20.0,
             'oled_mount_location_xyz': (-78.0, 20.0, 42.0), # will be overwritten if oled_center_row is not None
             'oled_mount_rotation_xyz': (12.0, 0.0, -6.0), # will be overwritten if oled_center_row is not None
-            'oled_left_wall_x_offset_override': 24.0,
-            'oled_left_wall_z_offset_override': 0.0,
-            'oled_left_wall_lower_y_offset': 12.0,
+            'oled_left_wall_x_offset_override': 50.0,
+            'oled_left_wall_z_offset_override': 2.0,
+            'oled_left_wall_lower_y_offset': 10.0,
             'oled_left_wall_lower_z_offset': 5.0,
 
             # 'CLIP' Parameters
             'oled_thickness': 4.3,  # thickness of OLED, plus clearance.  Must include components
             'oled_mount_bezel_thickness': 3.5,  # z thickness of clip bezel
             'oled_mount_bezel_chamfer': 2.0,  # depth of the 45 degree chamfer
-            'oled_mount_connector_hole': 6.0,
+            'oled_mount_connector_hole': 7.5,
             'oled_screen_start_from_conn_end': 6.5,
             'oled_screen_length': 15.5,
             'oled_screen_width': 30,
@@ -317,11 +318,11 @@ shape_config = {
 
     'screw_insert_height': 5.0,
 
-    # 'screw_insert_bottom_radius': 5.31 / 2,  #Designed for inserts
-    # 'screw_insert_top_radius': 5.1 / 2,  #Designed for inserts
+    'screw_insert_bottom_radius': 5.31 / 2,  #Designed for inserts
+    'screw_insert_top_radius': 5.1 / 2,  #Designed for inserts
 
-    'screw_insert_bottom_radius': 2.5 / 2,  # Designed for self tapping
-    'screw_insert_top_radius': 2.5 / 2,  # Designed for self tapping
+    # 'screw_insert_bottom_radius': 2.5 / 2,  # Designed for self tapping
+    # 'screw_insert_top_radius': 2.5 / 2,  # Designed for self tapping
 
     'screw_insert_outer_radius': 4.25,  # Common to keep interface to base
 

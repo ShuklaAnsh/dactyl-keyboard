@@ -340,23 +340,23 @@
     "plate_file": null,
     "plate_offset": 0.0,
     "oled_mount_type": "CLIP",
-    "oled_center_row": 1.25,
+    "oled_center_row": 1,
     "oled_translation_offset": [
         0,
         0,
         4
     ],
     "oled_rotation_offset": [
-        0,
-        0,
-        0
+        -15,
+        -25,
+        95
     ],
     "oled_configurations": {
         "CLIP": {
             "oled_mount_height": 34.2,
             "oled_mount_width": 36.2,
-            "oled_mount_rim": 2.0,
-            "oled_mount_depth": 7.0,
+            "oled_mount_rim": 1.5,
+            "oled_mount_depth": 15.0,
             "oled_mount_cut_depth": 20.0,
             "oled_mount_location_xyz": [
                 -78.0,
@@ -368,14 +368,14 @@
                 0.0,
                 -6.0
             ],
-            "oled_left_wall_x_offset_override": 24.0,
-            "oled_left_wall_z_offset_override": 0.0,
-            "oled_left_wall_lower_y_offset": 12.0,
+            "oled_left_wall_x_offset_override": 50.0,
+            "oled_left_wall_z_offset_override": 2.0,
+            "oled_left_wall_lower_y_offset": 10.0,
             "oled_left_wall_lower_z_offset": 5.0,
             "oled_thickness": 4.3,
             "oled_mount_bezel_thickness": 3.5,
             "oled_mount_bezel_chamfer": 2.0,
-            "oled_mount_connector_hole": 6.0,
+            "oled_mount_connector_hole": 7.5,
             "oled_screen_start_from_conn_end": 6.5,
             "oled_screen_length": 15.5,
             "oled_screen_width": 30,
@@ -392,8 +392,8 @@
     },
     "screws_offset": "INSIDE",
     "screw_insert_height": 5.0,
-    "screw_insert_bottom_radius": 1.25,
-    "screw_insert_top_radius": 1.25,
+    "screw_insert_bottom_radius": 2.655,
+    "screw_insert_top_radius": 2.55,
     "screw_insert_outer_radius": 4.25,
     "wire_post_height": 7,
     "wire_post_overhang": 3.5,
