@@ -1,0 +1,8 @@
+version: "3.9"
+
+services:
+  dactyl-keyboard:
+    build:
+      context: .
+    volumes:
+      - ./src:/app

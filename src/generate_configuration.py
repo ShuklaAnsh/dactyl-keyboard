@@ -62,7 +62,7 @@ shape_config = {
     ##############################
 
     # 'DEFAULT' 6-key, 'MINI' 5-key, 'CARBONFET' 6-key, 'MINIDOX' 3-key, 'TRACKBALL_ORBYL', 'TRACKBALL_CJ'
-    'thumb_style': 'DEFAULT',
+    'thumb_style': 'MINI',
     'default_1U_cluster': True, # only used with default, makes top right thumb cluster key 1U
     # Thumb key size.  May need slight oversizing, check w/ caps.  Additional spacing will be automatically added for larger keys.
     'minidox_Usize': 1.6,
@@ -279,50 +279,10 @@ shape_config = {
     'oled_rotation_offset': (0, 0, 0),
 
     'oled_configurations': {
-        'UNDERCUT':{
-            # Common parameters
-            'oled_mount_width': 15.0,
-            'oled_mount_height': 35.0,
-            'oled_mount_rim': 3.0,
-            'oled_mount_depth': 6.0,
-            'oled_mount_cut_depth': 20.0,
-            'oled_mount_location_xyz': (-80.0, 20.0, 45.0), # will be overwritten if oled_center_row is not None
-            'oled_mount_rotation_xyz': (13.0, 0.0, -6.0), # will be overwritten if oled_center_row is not None
-            'oled_left_wall_x_offset_override': 28.0,
-            'oled_left_wall_z_offset_override': 0.0,
-            'oled_left_wall_lower_y_offset': 12.0,
-            'oled_left_wall_lower_z_offset': 5.0,
-
-            # 'UNDERCUT' Parameters
-            'oled_mount_undercut': 1.0,
-            'oled_mount_undercut_thickness': 2.0,
-        },
-        'SLIDING': {
-            # Common parameters
-            'oled_mount_width': 12.5,  # width of OLED, plus clearance
-            'oled_mount_height': 25.0,  # length of screen
-            'oled_mount_rim': 2.5,
-            'oled_mount_depth': 8.0,
-            'oled_mount_cut_depth': 20.0,
-            'oled_mount_location_xyz': (-78.0, 10.0, 41.0), # will be overwritten if oled_center_row is not None
-            'oled_mount_rotation_xyz': (6.0, 0.0, -3.0), # will be overwritten if oled_center_row is not None
-            'oled_left_wall_x_offset_override': 24.0,
-            'oled_left_wall_z_offset_override': 0.0,
-            'oled_left_wall_lower_y_offset': 12.0,
-            'oled_left_wall_lower_z_offset': 5.0,
-
-            # 'SLIDING' Parameters
-            'oled_thickness': 4.2,  # thickness of OLED, plus clearance.  Must include components
-            'oled_edge_overlap_end': 6.5,  # length from end of viewable screen to end of PCB
-            'oled_edge_overlap_connector': 5.5,  # length from end of viewable screen to end of PCB on connection side.
-            'oled_edge_overlap_thickness': 2.5,  # thickness of material over edge of PCB
-            'oled_edge_overlap_clearance': 2.5,  # Clearance to insert PCB before laying down and sliding.
-            'oled_edge_chamfer': 2.0,
-        },
         'CLIP': {
             # Common parameters
-            'oled_mount_width': 12.5,  # whole OLED width
-            'oled_mount_height': 39.0,  # whole OLED length
+            'oled_mount_height': 34 + 0.2,  # whole OLED length
+            'oled_mount_width': 36 + 0.2,  # whole OLED width
             'oled_mount_rim': 2.0,
             'oled_mount_depth': 7.0,
             'oled_mount_cut_depth': 20.0,
@@ -334,13 +294,13 @@ shape_config = {
             'oled_left_wall_lower_z_offset': 5.0,
 
             # 'CLIP' Parameters
-            'oled_thickness': 4.2,  # thickness of OLED, plus clearance.  Must include components
+            'oled_thickness': 4.3,  # thickness of OLED, plus clearance.  Must include components
             'oled_mount_bezel_thickness': 3.5,  # z thickness of clip bezel
             'oled_mount_bezel_chamfer': 2.0,  # depth of the 45 degree chamfer
             'oled_mount_connector_hole': 6.0,
             'oled_screen_start_from_conn_end': 6.5,
-            'oled_screen_length': 24.5,
-            'oled_screen_width': 10.5,
+            'oled_screen_length': 15.5,
+            'oled_screen_width': 30,
             'oled_clip_thickness': 1.5,
             'oled_clip_width': 6.0,
             'oled_clip_overhang': 1.0,
@@ -355,7 +315,7 @@ shape_config = {
 
     'screws_offset': 'INSIDE', # 'OUTSIDE', 'INSIDE', 'ORIGINAL'
 
-    'screw_insert_height': 3.8,
+    'screw_insert_height': 5.0,
 
     # 'screw_insert_bottom_radius': 5.31 / 2,  #Designed for inserts
     # 'screw_insert_top_radius': 5.1 / 2,  #Designed for inserts

@@ -2,12 +2,11 @@ name: myenv
 channels:
   - cadquery
   - conda-forge
-  - defaults
 dependencies:
-  - python>=3.6
-  - cadquery=2
-  - pip
+  - cadquery=master
   - numpy
   - scipy
+  - dataclasses-json
+  - pip
   - pip:
     - solidpython
