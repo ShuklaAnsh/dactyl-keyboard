@@ -1,0 +1,7 @@
+name: dm-openscad
+dependencies:
+  - numpy
+  - scipy
+  - pip
+  - pip:
+    - solidpython

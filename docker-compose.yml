@@ -1,8 +1,17 @@
 version: "3.9"
 
 services:
-  dactyl-keyboard:
+  dm-cadquery:
+    platform: linux/amd64
     build:
       context: .
+      dockerfile: docker/dm-cadquery/Dockerfile
     volumes:
-      - ./src:/app
+      - .:/app
+
+  dm-openscad:
+    build:
+      context: .
+      dockerfile: docker/dm-openscad/Dockerfile
+    volumes:
+      - .:/app

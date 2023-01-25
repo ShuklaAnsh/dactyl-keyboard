@@ -1,4 +1,4 @@
-name: myenv
+name: dm-cadquery
 channels:
   - cadquery
   - conda-forge
@@ -6,7 +6,3 @@ dependencies:
   - cadquery=master
   - numpy
   - scipy
-  - dataclasses-json
-  - pip
-  - pip:
-    - solidpython
