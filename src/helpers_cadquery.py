@@ -58,13 +58,17 @@ def union(shapes):
             if shape is None:
                 shape = item
             else:
-                shape = shape.union(item)
+                try:
+                    shape = shape.union(item)
+                except TypeError:
+                    return shape
     return shape
 
 
 def add(shapes):
     debugprint('union()')
     shape = None
+    
     for item in shapes:
         if item is not None:
             if shape is None:
