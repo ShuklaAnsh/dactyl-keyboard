@@ -15,13 +15,13 @@ Run `docker compose build`
 If you are planning on using either openscad or cadquery, you can setup just one of the engines: `docker compose build <engine-env>`
 > `<engine-env>` is one of `dm-openscad`, `dm-cadquery`
 
-> `dm-cadquery` takes significantly more time to setup, but is more powerful than openscad
-
-> :information_source: `dm-cadquery` runs very slowly, but is recommended for final output. Use `dm-openscad` for quick edits
+> :information_source: `dm-cadquery` takes significantly more time to setup, but is more powerful than openscad. Use `dm-openscad` for quick edits
 
 ## Generating Models (Recommended Workflow)
-1. Enter bash in docker environment: run `docker compose run <engine-env>` 
+1. Enter bash in docker environment: run `docker compose run --rm <engine-env>` 
    > `<engine-env>` is one of `dm-openscad`, `dm-cadquery`
+   
+   > :information_source: `dm-cadquery` runs very slowly, but is recommended for final output. Use `dm-openscad` for quick edits
 
 2. Configure model
    1. Modify `src/generate_configuration.py` in a text editor
