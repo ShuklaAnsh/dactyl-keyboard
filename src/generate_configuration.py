@@ -3,17 +3,12 @@ import getopt
 import os
 import json
 
-avail_engines = ['solid', 'cadquery'] # 'solid' = solid python / OpenSCAD, 'cadquery' = cadquery / OpenCascade
-
-engine = os.getenv("ENGINE") # None if not set
-engine = engine if engine in avail_engines else "solid" 
-
 pi = 3.14159
 d2r = pi / 180
 r2d = 180 / pi
 
 shape_config = {
-    'ENGINE': engine,
+    # 'ENGINE': "solid", // specify engine here to overwrite environment variable. Options = 'solid' (openscad) or 'cadquery'
 
     ######################
     ## Shape parameters ##
@@ -291,8 +286,8 @@ shape_config = {
             'oled_mount_rotation_xyz': (12.0, 0.0, -6.0), # will be overwritten if oled_center_row is not None
             'oled_left_wall_x_offset_override': 50.0,
             'oled_left_wall_z_offset_override': 2.0,
-            'oled_left_wall_lower_y_offset': 10.0,
-            'oled_left_wall_lower_z_offset': 5.0,
+            'oled_left_wall_lower_y_offset': 0.0,
+            'oled_left_wall_lower_z_offset': 0.0,
 
             # 'CLIP' Parameters
             'oled_thickness': 4.3,  # thickness of OLED, plus clearance.  Must include components

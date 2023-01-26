@@ -8,6 +8,10 @@ import copy
 
 from scipy.spatial import ConvexHull as sphull
 
+avail_engines = ['solid', 'cadquery'] # 'solid' = solid python / OpenSCAD, 'cadquery' = cadquery / OpenCascade
+ENGINE = os.getenv("ENGINE") # None if not set
+ENGINE = ENGINE if ENGINE in avail_engines else "solid" 
+
 def deg2rad(degrees: float) -> float:
     return degrees * pi / 180
 
@@ -26,7 +30,7 @@ for item in cfg.shape_config:
     locals()[item] = cfg.shape_config[item]
 
 if len(sys.argv) <= 1:
-    print("NO CONFIGURATION SPECIFIED, USING run_config.json")
+    print("Reading run_config.json")
     with open(os.path.join(r".", 'run_config.json'), mode='r') as fid:
         data = json.load(fid)
 
@@ -36,20 +40,13 @@ else:
     for opt, arg in opts:
         if opt in ('--config'):
             with open(os.path.join(r"..", "configs", arg + '.json'), mode='r') as fid:
+                print(f"reading {fid.name}")
                 data = json.load(fid)
 
 for item in data:
     locals()[item] = data[item]
 
-
-# Really rough setup.  Check for ENGINE, set it not present from configuration.
-try:
-    print('Found Current Engine in Config = {}'.format(ENGINE))
-except Exception:
-    print('Engine Not Found in Config')
-    ENGINE = 'solid'
-    # ENGINE = 'cadquery'
-    print('Setting Current Engine = {}'.format(ENGINE))
+print('Using engine: {}'.format(ENGINE))
 
 if save_dir in ['', None, '.']:
     save_path = path.join(r"..", "things")

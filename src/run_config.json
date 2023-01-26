@@ -1,5 +1,4 @@
 {
-    "ENGINE": "solid",
     "save_dir": ".",
     "config_name": "DM",
     "show_caps": "MX",
@@ -370,8 +369,8 @@
             ],
             "oled_left_wall_x_offset_override": 50.0,
             "oled_left_wall_z_offset_override": 2.0,
-            "oled_left_wall_lower_y_offset": 10.0,
-            "oled_left_wall_lower_z_offset": 5.0,
+            "oled_left_wall_lower_y_offset": 0.0,
+            "oled_left_wall_lower_z_offset": 0.0,
             "oled_thickness": 4.3,
             "oled_mount_bezel_thickness": 3.5,
             "oled_mount_bezel_chamfer": 2.0,
