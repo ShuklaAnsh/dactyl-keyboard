@@ -14,7 +14,11 @@ shape_config = {
     ## Shape parameters ##
     ######################
 
-    'save_dir': '.',
+    # directory to save exports
+    'save_path': '../things',
+    # directory for pre-created parts (such as hotswap plates)
+    'parts_path': '../src/parts',
+    # config name, used in export names
     'config_name':  "DM",
 
     'show_caps': 'MX',
@@ -232,7 +236,7 @@ shape_config = {
     # 'HS_UNDERCUT' = hot swap underside with undercut. Does not generate properly.  Hot swap step needs to be modified.
     # 'HS_NOTCH' = hot swap underside with notch.  Does not generate properly.  Hot swap step needs to be modified.
     # 'plate_style':  'NUB',
-    'plate_style': 'NOTCH',
+    'plate_style': 'HS_NUB',
 
     'hole_keyswitch_height':  14.0,
     'hole_keyswitch_width':  14.0,
@@ -320,13 +324,6 @@ shape_config = {
     # 'screw_insert_top_radius': 2.5 / 2,  # Designed for self tapping
 
     'screw_insert_outer_radius': 4.25,  # Common to keep interface to base
-
-    # Does anyone even use these?  I think they just get in the way.
-    'wire_post_height': 7,
-    'wire_post_overhang': 3.5,
-    'wire_post_diameter': 2.6,
-
-
 
 
     ###################################

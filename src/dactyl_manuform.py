@@ -5,12 +5,13 @@ import getopt, sys
 import json
 import os
 import copy
-
 from scipy.spatial import ConvexHull as sphull
+from configuration import shape_config
 
 avail_engines = ['solid', 'cadquery'] # 'solid' = solid python / OpenSCAD, 'cadquery' = cadquery / OpenCascade
 ENGINE = os.getenv("ENGINE") # None if not set
-ENGINE = ENGINE if ENGINE in avail_engines else "solid" 
+ENGINE = ENGINE if ENGINE in avail_engines else shape_config.get('ENGINE', "solid")
+print('Using engine: {}'.format(ENGINE))
 
 def deg2rad(degrees: float) -> float:
     return degrees * pi / 180
@@ -25,35 +26,10 @@ def rad2deg(rad: float) -> float:
 ###############################################
 
 ## IMPORT DEFAULT CONFIG IN CASE NEW PARAMETERS EXIST
-import generate_configuration as cfg
-for item in cfg.shape_config:
-    locals()[item] = cfg.shape_config[item]
-
-if len(sys.argv) <= 1:
-    print("Reading run_config.json")
-    with open(os.path.join(r".", 'run_config.json'), mode='r') as fid:
-        data = json.load(fid)
-
-else:
-    ## CHECK FOR CONFIG FILE AND WRITE TO ANY VARIABLES IN FILE.
-    opts, args = getopt.getopt(sys.argv[1:], "", ["config="])
-    for opt, arg in opts:
-        if opt in ('--config'):
-            with open(os.path.join(r"..", "configs", arg + '.json'), mode='r') as fid:
-                print(f"reading {fid.name}")
-                data = json.load(fid)
-
-for item in data:
-    locals()[item] = data[item]
+for item in shape_config:
+    locals()[item] = shape_config[item]
 
 print('Using engine: {}'.format(ENGINE))
-
-if save_dir in ['', None, '.']:
-    save_path = path.join(r"..", "things")
-    parts_path = path.join(r"..", "src", "parts")
-else:
-    save_path = path.join(r"..", "things", save_dir)
-    parts_path = path.join(r"..", r"..", "src", "parts")
 
 ###############################################
 # END EXTREMELY UGLY BOOTSTRAP
@@ -3977,47 +3953,6 @@ def screw_insert_outers(offset=0.0, side='right'):
 
 def screw_insert_screw_holes(side='right'):
     return screw_insert_all_shapes(1.7, 1.7, 350, side=side)
-
-
-
-
-def wire_post(direction, offset):
-    debugprint('wire_post()')
-    s1 = box(
-        wire_post_diameter, wire_post_diameter, wire_post_height
-    )
-    s1 = translate(s1, [0, -wire_post_diameter * 0.5 * direction, 0])
-
-    s2 = box(
-        wire_post_diameter, wire_post_overhang, wire_post_diameter
-    )
-    s2 = translate(s2,
-                   [0, -wire_post_overhang * 0.5 * direction, -wire_post_height / 2]
-                   )
-
-    shape = union((s1, s2))
-    shape = translate(shape, [0, -offset, (-wire_post_height / 2) + 3])
-    shape = rotate(shape, [-alpha / 2, 0, 0])
-    shape = translate(shape, (3, -mount_height / 2, 0))
-
-    return shape
-
-
-def wire_posts():
-    debugprint('wire_posts()')
-    shape = default_thumb_ml_place(wire_post(1, 0).translate([-5, 0, -2]))
-    shape = union([shape, default_thumb_ml_place(wire_post(-1, 6).translate([0, 0, -2.5]))])
-    shape = union([shape, default_thumb_ml_place(wire_post(1, 0).translate([5, 0, -2]))])
-
-    for column in range(lastcol):
-        for row in range(cornerrow):
-            shape = union([
-                shape,
-                key_place(wire_post(1, 0).translate([-5, 0, 0]), column, row),
-                key_place(wire_post(-1, 6).translate([0, 0, 0]), column, row),
-                key_place(wire_post(1, 0).translate([5, 0, 0]), column, row),
-            ])
-    return shape
 
 
 def model_side(side="right"):
