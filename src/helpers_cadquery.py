@@ -2,55 +2,68 @@ import cadquery as cq
 from scipy.spatial import ConvexHull as sphull
 import numpy as np
 
+from typing import (
+    List,
+    Literal,
+    Tuple,
+    Union
+)
 
 debug_trace = False
+
 
 def debugprint(info):
     if debug_trace:
         print(info)
 
 
-def box(width, height, depth):
+def box(width: float, height: float, depth: float):
     return cq.Workplane("XY").box(width, height, depth)
 
 
-def cylinder(radius, height, segments=100):
-    shape = cq.Workplane("XY").union(cq.Solid.makeCylinder(radius=radius, height=height))
-    shape = translate(shape, (0, 0, -height/2))
-    return shape
+def cylinder(radius: float, height: float):
+    cylinder = cq.Workplane("XY").circle(radius).extrude(height)
+    cylinder = translate(cylinder, (0, 0, -height/2))
+    return cylinder
 
 
-def sphere(radius):
-    return cq.Workplane('XY').union(cq.Solid.makeSphere(radius))
+def sphere(radius: float):
+    return cq.Workplane("XY").sphere(radius)
 
 
-def cone(r1, r2, height):
-    return cq.Workplane('XY').union(
-        cq.Solid.makeCone(radius1=r1, radius2=r2, height=height))
+def cone(r1: float, r2: float, height: float):
+    return (cq.Workplane("XY")
+            .circle(r1)
+            .workplane(height)
+            .circle(r2)
+            .loft())
 
 
-def rotate(shape, angle):
+def rotate(shape: cq.Workplane, angle: Tuple[float, float, float]):
     if shape is None:
         return None
     origin = (0, 0, 0)
-    shape = shape.rotate(axisStartPoint=origin, axisEndPoint=(1, 0, 0), angleDegrees=angle[0])
-    shape = shape.rotate(axisStartPoint=origin, axisEndPoint=(0, 1, 0), angleDegrees=angle[1])
-    shape = shape.rotate(axisStartPoint=origin, axisEndPoint=(0, 0, 1), angleDegrees=angle[2])
+    shape = shape.rotate(axisStartPoint=origin, axisEndPoint=(
+        1, 0, 0), angleDegrees=angle[0])
+    shape = shape.rotate(axisStartPoint=origin, axisEndPoint=(
+        0, 1, 0), angleDegrees=angle[1])
+    shape = shape.rotate(axisStartPoint=origin, axisEndPoint=(
+        0, 0, 1), angleDegrees=angle[2])
     return shape
 
 
-def translate(shape, vector):
+def translate(shape: cq.Workplane, vector: Tuple[float, float, float]) -> (cq.Workplane | None):
     if shape is None:
         return None
     return shape.translate(tuple(vector))
 
 
-def mirror(shape, plane=None):
+def mirror(shape: cq.Workplane, plane: Literal["XY", "YX", "XZ", "ZX", "YZ", "ZY"]):
     debugprint('mirror()')
     return shape.mirror(mirrorPlane=plane)
 
 
-def union(shapes):
+def union(shapes: List[cq.Workplane]):
     debugprint('union()')
     shape = None
     for item in shapes:
@@ -58,17 +71,14 @@ def union(shapes):
             if shape is None:
                 shape = item
             else:
-                try:
-                    shape = shape.union(item)
-                except TypeError:
-                    return shape
+                shape = shape.union(item)
     return shape
 
 
-def add(shapes):
-    debugprint('union()')
+def add(shapes: List[cq.Workplane]):
+    debugprint('add()')
     shape = None
-    
+
     for item in shapes:
         if item is not None:
             if shape is None:
@@ -78,7 +88,7 @@ def add(shapes):
     return shape
 
 
-def difference(shape, shapes):
+def difference(shape: cq.Workplane, shapes: List[cq.Workplane]):
     debugprint('difference()')
     for item in shapes:
         if item is not None:
@@ -86,14 +96,15 @@ def difference(shape, shapes):
     return shape
 
 
-def intersect(shape1, shape2):
+def intersect(shape1: cq.Workplane, shape2: cq.Workplane):
     if shape2 is not None:
         return shape1.intersect(shape2)
     else:
         return shape1
 
-def face_from_points(points):
-    # debugprint('face_from_points()')
+
+def face_from_points(points: List[Tuple[float, float, float]]):
+    debugprint('face_from_points()')
     edges = []
     num_pnts = len(points)
     for i in range(len(points)):
@@ -105,9 +116,7 @@ def face_from_points(points):
                 cq.Vector(p2[0], p2[1], p2[2]),
             )
         )
-
     face = cq.Face.makeFromWires(cq.Wire.assembleEdges(edges))
-
     return face
 
 
@@ -168,9 +177,6 @@ def triangle_hulls(shapes):
         hulls.append(hull_from_shapes(shapes[i: (i + 3)]))
 
     return union(hulls)
-
-
-
 
 
 def bottom_hull(p, height=0.001):
