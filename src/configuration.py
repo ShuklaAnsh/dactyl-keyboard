@@ -15,13 +15,13 @@ shape_config = {
     ######################
 
     # directory to save exports
-    'save_path': '../things',
+    'save_path': os.path.join(os.path.realpath(os.path.dirname(__file__)), '../things'),
     # directory for pre-created parts (such as hotswap plates)
-    'parts_path': '../src/parts',
+    'parts_path': os.path.join(os.path.realpath(os.path.dirname(__file__)), '../src/parts'),
     # config name, used in export names
     'config_name':  "DM",
 
-    'show_caps': 'MX',
+    'show_caps': None,
     'show_pcbs': False, #only runs if caps are shown, easist place to initially inject geometry
 
     'nrows':  5, #5,  # key rows
@@ -44,17 +44,17 @@ shape_config = {
 
     'thumb_offsets':  [6, -3, 7],
     'keyboard_z_offset':  (
-        11  # controls overall height# original=9 with centercol=3# use 16 for centercol=2
+        9  # controls overall height# original=9 with centercol=3# use 16 for centercol=2
     ),
 
 
-    'extra_width': 2.5,  # extra space between the base of keys# original= 2
-    'extra_height': 1.0,  # original= 0.5
+    'extra_width': 2.25,  # extra space between the base of keys# original= 2
+    'extra_height': 0.5,  # original= 0.5
 
 
     'web_thickness': 4.0 + 1.1,
     'post_size': 0.1,
-    # post_adj':  post_size / 2
+    # 'post_adj':  0.1 / 2,
     'post_adj': 0,
 
     ##############################
@@ -75,7 +75,7 @@ shape_config = {
     # First screw in separable should be similar to the standard location as it will receive the same modifiers.
     'default_thumb_screw_xy_locations': [[-21, -58]],
     'default_separable_thumb_screw_xy_locations': [[-21, -58]],
-    'mini_thumb_screw_xy_locations': [[-29, -52]],
+    'mini_thumb_screw_xy_locations': [[-43.5, -52.5]],
     'mini_separable_thumb_screw_xy_locations': [[-29, -52], [-62, 10], [12, -25]],
     'minidox_thumb_screw_xy_locations': [[-37, -34]],
     'minidox_separable_thumb_screw_xy_locations': [[-37, -34], [-62, 12], [10, -25]],
@@ -197,19 +197,19 @@ shape_config = {
 
 
 
-    'wall_z_offset':  15,  # length of the first downward_sloping part of the wall
-    'wall_x_offset':  5,  # offset in the x and/or y direction for the first downward_sloping part of the wall (negative)
-    'wall_y_offset':  6,  # offset in the x and/or y direction for the first downward_sloping part of the wall (negative)
-    'left_wall_x_offset':  12,  # specific values for the left side due to the minimal wall.
-    'left_wall_z_offset':  3,  # specific values for the left side due to the minimal wall.
-    'left_wall_lower_x_offset': 0,  # specific values for the lower left corner.
-    'left_wall_lower_y_offset': 0,  # specific values for the lower left corner.
-    'left_wall_lower_z_offset': 0,
-    'wall_thickness':  4.5,  # wall thickness parameter used on upper/mid stage of the wall
-    'wall_base_y_thickness':  4.5,  # wall thickness at the lower stage
-    'wall_base_x_thickness':  4.5,  # wall thickness at the lower stage
+    'wall_z_offset':  0.5,  # length of the first downward_sloping part of the wall
+    'wall_x_offset':  0.5,  # offset in the x and/or y direction for the first downward_sloping part of the wall (negative)
+    'wall_y_offset':  0.5,  # offset in the x and/or y direction for the first downward_sloping part of the wall (negative)
+    'left_wall_x_offset':  0.5,  # specific values for the left side due to the minimal wall.
+    'left_wall_z_offset':  0.5,  # specific values for the left side due to the minimal wall.
+    'left_wall_lower_x_offset': 0.5,  # specific values for the lower left corner.
+    'left_wall_lower_y_offset': 0.5,  # specific values for the lower left corner.
+    'left_wall_lower_z_offset': 0.5,
+    'wall_thickness':  4.0,  # wall thickness parameter used on upper/mid stage of the wall
+    'wall_base_y_thickness':  5.0,  # wall thickness at the lower stage
+    'wall_base_x_thickness':  5.0,  # wall thickness at the lower stage
 
-    'wall_base_back_thickness':  4.5,  # wall thickness at the lower stage in the specifically in back for interface.
+    'wall_base_back_thickness':  5.0,  # wall thickness at the lower stage in the specifically in back for interface.
 
     ## Settings for column_style == :fixed
     ## The defaults roughly match Maltron settings
@@ -236,7 +236,7 @@ shape_config = {
     # 'HS_UNDERCUT' = hot swap underside with undercut. Does not generate properly.  Hot swap step needs to be modified.
     # 'HS_NOTCH' = hot swap underside with notch.  Does not generate properly.  Hot swap step needs to be modified.
     # 'plate_style':  'NUB',
-    'plate_style': 'HS_NUB',
+    'plate_style': 'HS_UNDERCUT',
 
     'hole_keyswitch_height':  14.0,
     'hole_keyswitch_width':  14.0,
@@ -273,10 +273,10 @@ shape_config = {
     # 'SLIDING' = Features to slide the OLED in place and use a pin or block to secure from underneath.
     # 'CLIP' = Features to set the OLED in a frame a snap a bezel down to hold it in place.
 
-    'oled_mount_type':  'CLIP',
-    'oled_center_row': 1, # if not None, this will override the oled_mount_location_xyz and oled_mount_rotation_xyz settings
-    'oled_translation_offset': (0, 0, 4), # Z offset tweaks are expected depending on curvature and OLED mount choice.
-    'oled_rotation_offset': (-15, -25, 95),
+    'oled_mount_type': 'CLIP',
+    'oled_center_row': None, # 1.1, # if not None, this will override the oled_mount_location_xyz and oled_mount_rotation_xyz settings
+    'oled_translation_offset': (0, 0, -12), # Z offset tweaks are expected depending on curvature and OLED mount choice.
+    'oled_rotation_offset': (10, -23, 3),
 
     'oled_configurations': {
         'CLIP': {
@@ -284,13 +284,13 @@ shape_config = {
             'oled_mount_height': 34 + 0.2,  # whole OLED length
             'oled_mount_width': 36 + 0.2,  # whole OLED width
             'oled_mount_rim': 1.5,
-            'oled_mount_depth': 15.0,
+            'oled_mount_depth': 15,
             'oled_mount_cut_depth': 20.0,
-            'oled_mount_location_xyz': (-78.0, 20.0, 42.0), # will be overwritten if oled_center_row is not None
-            'oled_mount_rotation_xyz': (12.0, 0.0, -6.0), # will be overwritten if oled_center_row is not None
-            'oled_left_wall_x_offset_override': 50.0,
-            'oled_left_wall_z_offset_override': 2.0,
-            'oled_left_wall_lower_y_offset': 0.0,
+            'oled_mount_location_xyz': (100, 0, 0), # will be overwritten if oled_center_row is not None
+            'oled_mount_rotation_xyz': (0, 0, 0), # will be overwritten if oled_center_row is not None
+            'oled_left_wall_x_offset_override': 40.0,
+            'oled_left_wall_z_offset_override': 20.0,
+            'oled_left_wall_lower_y_offset': 0,
             'oled_left_wall_lower_z_offset': 0.0,
 
             # 'CLIP' Parameters
@@ -422,41 +422,4 @@ shape_config = {
 
 }
 
-    ####################################
-    ## END CONFIGURATION SECTION
-    ####################################
-
-def save_config():
-    # Check to see if the user has specified an alternate config
-    opts, args = getopt.getopt(sys.argv[1:], "", ["config=", "update="])
-    got_opts = False
-    for opt, arg in opts:
-        if opt in ('--update'):
-            with open(os.path.join(r"..", "configs", arg + '.json'), mode='r') as fid:
-                data = json.load(fid)
-                shape_config.update(data)
-            got_opts = True
-
-    for opt, arg in opts:
-        if opt in ('--config'):
-            # If a config file was specified, set the config_name and save_dir
-            shape_config['save_dir'] = arg
-            shape_config['config_name'] = arg
-            got_opts = True
-
-    # Write the config to ./configs/<config_name>.json
-    if got_opts:
-        with open(os.path.join(r"..", "configs", shape_config['config_name'] + '.json'), mode='w') as fid:
-            json.dump(shape_config, fid, indent=4)
-
-    else:
-        with open(os.path.join(r".", 'run_config.json'), mode='w') as fid:
-            json.dump(shape_config, fid, indent=4)
-
-
-if __name__ == '__main__':
-    save_config()
-
-    ## HERE FOR QUICK TESTING, SHOULD BE COMMENTED ON COMMIT
-    # from dactyl_manuform import *
-    # run()
+print(shape_config.get("parts_path"))

@@ -10,7 +10,7 @@ from configuration import shape_config
 
 avail_engines = ['solid', 'cadquery'] # 'solid' = solid python / OpenSCAD, 'cadquery' = cadquery / OpenCascade
 ENGINE = os.getenv("ENGINE") # None if not set
-ENGINE = ENGINE if ENGINE in avail_engines else shape_config.get('ENGINE', "solid")
+ENGINE = ENGINE if ENGINE in avail_engines else shape_config.get('ENGINE', "cadquery")
 print('Using engine: {}'.format(ENGINE))
 
 def deg2rad(degrees: float) -> float:
@@ -3436,6 +3436,8 @@ def generate_trackball_in_wall():
 
 def oled_position_rotation(side='right'):
     _oled_center_row = None
+    _oled_mount_location_xyz = oled_mount_location_xyz
+    _oled_mount_rotation_xyz = oled_mount_rotation_xyz
     if trackball_in_wall and (side == ball_side or ball_side == 'both'):
         _oled_center_row = tbiw_oled_center_row
         _oled_translation_offset = tbiw_oled_translation_offset
@@ -3462,19 +3464,19 @@ def oled_position_rotation(side='right'):
         else:
             _left_wall_x_offset = left_wall_x_offset
 
-        oled_mount_location_xyz = (np.array(base_pt1)+np.array(base_pt2))/2. + np.array(((-_left_wall_x_offset/2), 0, 0)) + np.array(_oled_translation_offset)
-        oled_mount_location_xyz[2] = (oled_mount_location_xyz[2] + base_pt0[2])/2
+        _oled_mount_location_xyz = (np.array(base_pt1)+np.array(base_pt2))/2. + np.array(((-_left_wall_x_offset/2), 0, 0)) + np.array(_oled_translation_offset)
+        _oled_mount_location_xyz[2] = (_oled_mount_location_xyz[2] + base_pt0[2])/2
 
         angle_x = np.arctan2(base_pt1[2] - base_pt2[2], base_pt1[1] - base_pt2[1])
         angle_z = np.arctan2(base_pt1[0] - base_pt2[0], base_pt1[1] - base_pt2[1])
         if trackball_in_wall and (side == ball_side or ball_side == 'both'):
-            # oled_mount_rotation_xyz = (0, rad2deg(angle_x), -rad2deg(angle_z)-90) + np.array(oled_rotation_offset)
-            # oled_mount_rotation_xyz = (rad2deg(angle_x)*.707, rad2deg(angle_x)*.707, -45) + np.array(oled_rotation_offset)
-            oled_mount_rotation_xyz = (0, rad2deg(angle_x), -90) + np.array(_oled_rotation_offset)
+            # _oled_mount_rotation_xyz = (0, rad2deg(angle_x), -rad2deg(angle_z)-90) + np.array(oled_rotation_offset)
+            # _oled_mount_rotation_xyz = (rad2deg(angle_x)*.707, rad2deg(angle_x)*.707, -45) + np.array(oled_rotation_offset)
+            _oled_mount_rotation_xyz = (0, rad2deg(angle_x), -90) + np.array(_oled_rotation_offset)
         else:
-            oled_mount_rotation_xyz = (rad2deg(angle_x), 0, -rad2deg(angle_z)) + np.array(_oled_rotation_offset)
+            _oled_mount_rotation_xyz = (rad2deg(angle_x), 0, -rad2deg(angle_z)) + np.array(_oled_rotation_offset)
 
-    return oled_mount_location_xyz, oled_mount_rotation_xyz
+    return _oled_mount_location_xyz, _oled_mount_rotation_xyz
 
 def oled_sliding_mount_frame(side='right'):
     mount_ext_width = oled_mount_width + 2 * oled_mount_rim
@@ -3733,11 +3735,6 @@ def oled_undercut_mount_frame(side='right'):
     return hole, shape
 
 
-
-
-
-
-
 def teensy_holder():
     print('teensy_holder()')
     teensy_top_xy = key_position(wall_locate3(-1, 0), 0, centerrow - 1)
@@ -3955,6 +3952,41 @@ def screw_insert_screw_holes(side='right'):
     return screw_insert_all_shapes(1.7, 1.7, 350, side=side)
 
 
+def rotary_encoder_pos_rot():
+    rot_enc_center_row = 0.2
+    rot_enc_translational_offset = (-10.0, 0.0, -5.0)
+    rot_enc_rotation_offset = (0.0, 0.0, 0.0)
+    rot_enc_left_wall_x_offset_override = 10
+
+    base_pt1 = key_position(
+        list(np.array([-mount_width/2, 0, 0]) + np.array([0, (mount_height / 2), 0])),
+        0, cornerrow - rot_enc_center_row - 1
+    )
+    base_pt2 = key_position(
+        list(np.array([-mount_width/2, 0, 0]) + np.array([0, (mount_height / 2), 0])),
+        0, cornerrow - rot_enc_center_row + 1
+    )
+    base_pt0 = key_position(
+        list(np.array([-mount_width / 2, 0, 0]) + np.array([0, (mount_height / 2), 0])),
+        0, cornerrow - rot_enc_center_row
+    )
+
+    left_wall_x_offset = rot_enc_left_wall_x_offset_override
+
+    rot_enc_mount_location_xyz = (
+            (np.array(base_pt1)+np.array(base_pt2))/2.
+            + np.array(((-left_wall_x_offset/2), 0, 0))
+            + np.array(rot_enc_translational_offset)
+    )
+
+    # rot_enc_mount_location_xyz[2] = (oled_translation_offset[2] + base_pt0[2])/2
+
+    angle_x = np.arctan2(base_pt1[2] - base_pt2[2], base_pt1[1] - base_pt2[1])
+    angle_z = np.arctan2(base_pt1[0] - base_pt2[0], base_pt1[1] - base_pt2[1])
+    rot_enc_mount_rotation_xyz = (rad2deg(angle_x), 0, rad2deg(angle_z)) + np.array(rot_enc_rotation_offset)
+
+    return rot_enc_mount_location_xyz, rot_enc_mount_rotation_xyz
+
 def model_side(side="right"):
     print('model_right()')
     #shape = add([key_holes(side=side)])
@@ -4015,6 +4047,14 @@ def model_side(side="right"):
         hole, frame = oled_clip_mount_frame(side=side)
         shape = difference(shape, [hole])
         shape = union([shape, frame])
+
+    #### TESTING
+    # rotary_cutout = cylinder(6, 40)
+    # pos, rot = rotary_encoder_pos_rot()
+    # rotary_cutout = rotate(rotary_cutout, rot)
+    # rotary_cutout = translate(rotary_cutout, pos)
+    # shape = difference(shape, [rotary_cutout])
+    #### END TESTING
 
     if trackball_in_wall and (side == ball_side or ball_side == 'both') and separable_thumb:
         tbprecut, tb, tbcutout, sensor, ball = generate_trackball_in_wall()
@@ -4114,10 +4154,6 @@ def model_side(side="right"):
 
             if show_caps:
                 main_shape = add([main_shape, ball])
-
-
-
-
 
     if show_caps:
         main_shape = add([main_shape, caps()])
@@ -4265,18 +4301,13 @@ def run():
         export_file(shape=lbase, fname=path.join(save_path, config_name + r"_left_plate"))
         export_dxf(shape=lbase, fname=path.join(save_path, config_name + r"_left_plate"))
 
+    # if oled_mount_type == 'UNDERCUT':
+    #     export_file(shape=oled_undercut_mount_frame()[1], fname=path.join(save_path, config_name + r"_oled_undercut_test"))
 
-
-
-    if oled_mount_type == 'UNDERCUT':
-        export_file(shape=oled_undercut_mount_frame()[1], fname=path.join(save_path, config_name + r"_oled_undercut_test"))
-
-    if oled_mount_type == 'SLIDING':
-        export_file(shape=oled_sliding_mount_frame()[1], fname=path.join(save_path, config_name + r"_oled_sliding_test"))
+    # if oled_mount_type == 'SLIDING':
+    #     export_file(shape=oled_sliding_mount_frame()[1], fname=path.join(save_path, config_name + r"_oled_sliding_test"))
 
     if oled_mount_type == 'CLIP':
-        oled_mount_location_xyz = (0.0, 0.0, -oled_mount_depth / 2)
-        oled_mount_rotation_xyz = (0.0, 0.0, 0.0)
         export_file(shape=oled_clip(), fname=path.join(save_path, config_name + r"_oled_clip"))
         export_file(shape=oled_clip_mount_frame()[1],
                             fname=path.join(save_path, config_name + r"_oled_clip_test"))
