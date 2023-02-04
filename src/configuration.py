@@ -39,7 +39,7 @@ shape_config = {
     'column_style_gt5':  "orthographic",
     'column_style':  "standard",  # options include :standard, :orthographic, and :fixed
     'reduced_inner_cols': 2,  #currently supports 0 or 2 due to thumb cluster attachment
-    'reduced_outer_cols': 0,
+    'reduced_outer_cols': 2,
 
 
     'thumb_offsets':  [6, -3, 7],
@@ -284,8 +284,8 @@ shape_config = {
             'oled_mount_height': 27.8 + 0.35,  # whole OLED length
             'oled_mount_width': 27.3 + 0.35,  # whole OLED width
             'oled_mount_rim': 1.5,
-            'oled_mount_depth': 15,
-            'oled_mount_cut_depth': 15.5,
+            'oled_mount_depth': 20,
+            'oled_mount_cut_depth': 15,
             'oled_mount_location_xyz': (100, 0, 0), # will be overwritten if oled_center_row is not None
             'oled_mount_rotation_xyz': (0, 0, 0), # will be overwritten if oled_center_row is not None
             'oled_left_wall_x_offset_override': 0, # 20.0,
@@ -411,13 +411,13 @@ shape_config = {
     ####################################
 
     'column_offsets':  [
-        [0, 0, 0],
+        [0, -2, 0],
         [0, 0, 0],
         [0, 2.82, -4.5],
         [0, 0, 0],
-        [0, -8, 5.64],# REDUCED STAGGER
-        [0, -6, 5.64],# REDUCED STAGGER
-        [0, -6, 5],# NOT USED IN MOST FORMATS (7th column)
+        [0, -12, 5.64], # original [0 -5.8 5.64]
+        [0, -12, 5.64], # original [0 -5.8 5.64]
+        [0, -6, 5], # NOT USED IN MOST FORMATS (7th column)
     ],
 
 }
