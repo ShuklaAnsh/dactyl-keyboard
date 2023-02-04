@@ -29,7 +29,7 @@ shape_config = {
 
     'alpha':  pi / 12.0,  # curvature of the columns
     'beta':  pi / 36.0,  # curvature of the rows
-    'centercol':  3,  # controls left_right tilt / tenting (higher number is more tenting)
+    'centercol':  3,  #3 controls left_right tilt / tenting (higher number is more tenting)
     'centerrow_offset':  3,  # rows from max, controls front_back tilt
     'tenting_angle':  pi / 12.0,  # or, change this for more precise tenting control
 
@@ -48,8 +48,8 @@ shape_config = {
     ),
 
 
-    'extra_width': 2.25,  # extra space between the base of keys# original= 2
-    'extra_height': 0.5,  # original= 0.5
+    'extra_width': 2.5,  # extra space between the base of keys# original= 2
+    'extra_height': 1,  # original= 0.5
 
 
     'web_thickness': 4.0 + 1.1,
@@ -209,7 +209,7 @@ shape_config = {
     'wall_base_y_thickness':  5.0,  # wall thickness at the lower stage
     'wall_base_x_thickness':  5.0,  # wall thickness at the lower stage
 
-    'wall_base_back_thickness':  5.0,  # wall thickness at the lower stage in the specifically in back for interface.
+    'wall_base_back_thickness':  6.0,  # wall thickness at the lower stage in the specifically in back for interface.
 
     ## Settings for column_style == :fixed
     ## The defaults roughly match Maltron settings
@@ -235,8 +235,8 @@ shape_config = {
     # 'HS_NUB' = hot swap underside with nubs.
     # 'HS_UNDERCUT' = hot swap underside with undercut. Does not generate properly.  Hot swap step needs to be modified.
     # 'HS_NOTCH' = hot swap underside with notch.  Does not generate properly.  Hot swap step needs to be modified.
-    # 'plate_style':  'NUB',
-    'plate_style': 'HS_UNDERCUT',
+    # 'plate_style': 'HS_NUB',
+    'plate_style': 'NUB',
 
     'hole_keyswitch_height':  14.0,
     'hole_keyswitch_width':  14.0,
@@ -274,23 +274,23 @@ shape_config = {
     # 'CLIP' = Features to set the OLED in a frame a snap a bezel down to hold it in place.
 
     'oled_mount_type': 'CLIP',
-    'oled_center_row': None, # 1.1, # if not None, this will override the oled_mount_location_xyz and oled_mount_rotation_xyz settings
-    'oled_translation_offset': (0, 0, -12), # Z offset tweaks are expected depending on curvature and OLED mount choice.
-    'oled_rotation_offset': (10, -23, 3),
+    'oled_center_row': 0.5, # 1.1, # if not None, this will override the oled_mount_location_xyz and oled_mount_rotation_xyz settings
+    'oled_translation_offset': (-18, 0, -5), # Z offset tweaks are expected depending on curvature and OLED mount choice.
+    'oled_rotation_offset': (0, 0, 0),
 
     'oled_configurations': {
         'CLIP': {
             # Common parameters
-            'oled_mount_height': 34 + 0.2,  # whole OLED length
-            'oled_mount_width': 36 + 0.2,  # whole OLED width
+            'oled_mount_height': 27.8 + 0.35,  # whole OLED length
+            'oled_mount_width': 27.3 + 0.35,  # whole OLED width
             'oled_mount_rim': 1.5,
             'oled_mount_depth': 15,
-            'oled_mount_cut_depth': 20.0,
+            'oled_mount_cut_depth': 15.5,
             'oled_mount_location_xyz': (100, 0, 0), # will be overwritten if oled_center_row is not None
             'oled_mount_rotation_xyz': (0, 0, 0), # will be overwritten if oled_center_row is not None
-            'oled_left_wall_x_offset_override': 40.0,
-            'oled_left_wall_z_offset_override': 20.0,
-            'oled_left_wall_lower_y_offset': 0,
+            'oled_left_wall_x_offset_override': 0, # 20.0,
+            'oled_left_wall_z_offset_override': 0, # 20.0,
+            'oled_left_wall_lower_y_offset': 0.0,
             'oled_left_wall_lower_z_offset': 0.0,
 
             # 'CLIP' Parameters
@@ -299,8 +299,8 @@ shape_config = {
             'oled_mount_bezel_chamfer': 2.0,  # depth of the 45 degree chamfer
             'oled_mount_connector_hole': 7.5,
             'oled_screen_start_from_conn_end': 6.5,
-            'oled_screen_length': 15.5,
-            'oled_screen_width': 30,
+            'oled_screen_length': 12.864,
+            'oled_screen_width': 23.744,
             'oled_clip_thickness': 1.5,
             'oled_clip_width': 6.0,
             'oled_clip_overhang': 1.0,
@@ -415,8 +415,8 @@ shape_config = {
         [0, 0, 0],
         [0, 2.82, -4.5],
         [0, 0, 0],
-        [0, -6, 5],# REDUCED STAGGER
-        [0, -6, 5],# REDUCED STAGGER
+        [0, -8, 5.64],# REDUCED STAGGER
+        [0, -6, 5.64],# REDUCED STAGGER
         [0, -6, 5],# NOT USED IN MOST FORMATS (7th column)
     ],
 

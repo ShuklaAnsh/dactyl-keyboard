@@ -10,8 +10,7 @@ from configuration import shape_config
 
 avail_engines = ['solid', 'cadquery'] # 'solid' = solid python / OpenSCAD, 'cadquery' = cadquery / OpenCascade
 ENGINE = os.getenv("ENGINE") # None if not set
-ENGINE = ENGINE if ENGINE in avail_engines else shape_config.get('ENGINE', "cadquery")
-print('Using engine: {}'.format(ENGINE))
+ENGINE = ENGINE if ENGINE in avail_engines else shape_config.get('ENGINE', "solid")
 
 def deg2rad(degrees: float) -> float:
     return degrees * pi / 180
@@ -4229,6 +4228,7 @@ def baseplate(wedge_angle=None, side='right'):
         if wedge_angle is not None:
             cq.Workplane('XY').add(cq.Solid.revolve(outerWire, innerWires, angleDegrees, axisStart, axisEnd))
         else:
+            # face = cq.Face.makeFromWires(outerWire=inner_wire);
             inner_shape = cq.Workplane('XY').add(cq.Solid.extrudeLinear(outerWire=inner_wire, innerWires=[], vecNormal=cq.Vector(0, 0, base_thickness)))
             inner_shape = translate(inner_shape, (0, 0, -base_rim_thickness))
 
@@ -4238,7 +4238,7 @@ def baseplate(wedge_angle=None, side='right'):
                     holes.append(base_wires[i])
             cutout = [*holes, inner_wire]
 
-            shape = cq.Workplane('XY').add(cq.Solid.extrudeLinear(outer_wire, cutout, cq.Vector(0, 0, base_rim_thickness)))
+            shape = cq.Workplane('XY').add(cq.Solid.extrudeLinear(outerWire=outer_wire, innerWires=cutout, vecNormal=cq.Vector(0, 0, base_rim_thickness)))
             hole_shapes=[]
             for hole in holes:
                 loc = hole.Center()
@@ -4309,8 +4309,8 @@ def run():
 
     if oled_mount_type == 'CLIP':
         export_file(shape=oled_clip(), fname=path.join(save_path, config_name + r"_oled_clip"))
-        export_file(shape=oled_clip_mount_frame()[1],
-                            fname=path.join(save_path, config_name + r"_oled_clip_test"))
+        # export_file(shape=oled_clip_mount_frame()[1],
+        #                     fname=path.join(save_path, config_name + r"_oled_clip_test"))
         export_file(shape=union((oled_clip_mount_frame()[1], oled_clip())),
                             fname=path.join(save_path, config_name + r"_oled_clip_assy_test"))
 
