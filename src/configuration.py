@@ -209,7 +209,7 @@ shape_config = {
     'wall_base_y_thickness':  5.0,  # wall thickness at the lower stage
     'wall_base_x_thickness':  5.0,  # wall thickness at the lower stage
 
-    'wall_base_back_thickness':  6.0,  # wall thickness at the lower stage in the specifically in back for interface.
+    'wall_base_back_thickness':  5.0,  # wall thickness at the lower stage in the specifically in back for interface.
 
     ## Settings for column_style == :fixed
     ## The defaults roughly match Maltron settings
@@ -274,8 +274,8 @@ shape_config = {
     # 'CLIP' = Features to set the OLED in a frame a snap a bezel down to hold it in place.
 
     'oled_mount_type': 'CLIP',
-    'oled_center_row': 0.5, # 1.1, # if not None, this will override the oled_mount_location_xyz and oled_mount_rotation_xyz settings
-    'oled_translation_offset': (-18, 0, -5), # Z offset tweaks are expected depending on curvature and OLED mount choice.
+    'oled_center_row': 1.0, # 1.1, # if not None, this will override the oled_mount_location_xyz and oled_mount_rotation_xyz settings
+    'oled_translation_offset': (-18, 0, -3.8), # Z offset tweaks are expected depending on curvature and OLED mount choice.
     'oled_rotation_offset': (0, 0, 0),
 
     'oled_configurations': {
@@ -284,18 +284,18 @@ shape_config = {
             'oled_mount_height': 27.8 + 0.35,  # whole OLED length
             'oled_mount_width': 27.3 + 0.35,  # whole OLED width
             'oled_mount_rim': 1.5,
-            'oled_mount_depth': 20,
-            'oled_mount_cut_depth': 15,
+            'oled_mount_depth': 14,
+            'oled_mount_cut_depth': 14,
             'oled_mount_location_xyz': (100, 0, 0), # will be overwritten if oled_center_row is not None
             'oled_mount_rotation_xyz': (0, 0, 0), # will be overwritten if oled_center_row is not None
-            'oled_left_wall_x_offset_override': 0, # 20.0,
+            'oled_left_wall_x_offset_override': 0.50, # 20.0,
             'oled_left_wall_z_offset_override': 0, # 20.0,
             'oled_left_wall_lower_y_offset': 0.0,
-            'oled_left_wall_lower_z_offset': 0.0,
+            'oled_left_wall_lower_z_offset': -5.0,
 
             # 'CLIP' Parameters
             'oled_thickness': 4.3,  # thickness of OLED, plus clearance.  Must include components
-            'oled_mount_bezel_thickness': 3.5,  # z thickness of clip bezel
+            'oled_mount_bezel_thickness': 1.24,  # z thickness of clip bezel
             'oled_mount_bezel_chamfer': 2.0,  # depth of the 45 degree chamfer
             'oled_mount_connector_hole': 7.5,
             'oled_screen_start_from_conn_end': 6.5,

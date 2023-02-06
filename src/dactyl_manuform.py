@@ -3121,8 +3121,8 @@ def case_walls(side='right', skeleton=False):
             left_wall(side=side, skeleton=skeleton),
             right_wall(skeleton=skeleton),
             front_wall(skeleton=skeleton),
-            # thumb_walls(side=side),
-            # thumb_connection(side=side),
+            thumb_walls(side=side),
+            thumb_connection(side=side),
         ])
     )
 
@@ -3581,10 +3581,10 @@ def oled_clip_mount_frame(side='right'):
             oled_mount_height + 2 * oled_clip_thickness
             + 2 * oled_clip_undercut + 2 * oled_clip_overhang + 2 * oled_mount_rim
     )
-    hole = box(mount_ext_width, mount_ext_height, oled_mount_cut_depth + .01)
 
     shape = box(mount_ext_width, mount_ext_height, oled_mount_depth)
-    shape = difference(shape, [box(oled_mount_width, oled_mount_height, oled_mount_depth + .1)])
+    oled_cutout = box(oled_mount_width, oled_mount_height, oled_mount_depth + .1)
+    shape = difference(shape, [oled_cutout])
 
     clip_slot = box(
         oled_clip_width + 2 * oled_clip_width_clearance,
@@ -3612,25 +3612,70 @@ def oled_clip_mount_frame(side='right'):
     shape = union([shape, plate])
 
     oled_mount_location_xyz, oled_mount_rotation_xyz = oled_position_rotation(side=side)
-
     shape = rotate(shape, oled_mount_rotation_xyz)
-    shape = translate(shape,
-        (
-            oled_mount_location_xyz[0],
-            oled_mount_location_xyz[1],
-            oled_mount_location_xyz[2],
-        )
-    )
+    shape = translate(shape, oled_mount_location_xyz)
 
-    hole = rotate(hole, oled_mount_rotation_xyz)
-    hole = translate(hole,
-        (
-            oled_mount_location_xyz[0],
-            oled_mount_location_xyz[1],
-            oled_mount_location_xyz[2],
-        )
-    )
+    # #### TESTING
+    # from math import cos, sin
+    # x = mount_ext_height
+    # y = oled_mount_depth
 
+    # theta = deg2rad(oled_mount_rotation_xyz[0])
+    # print(f"rot: {oled_mount_rotation_xyz}")
+    # print(f"theta {theta.__round__(2)}")
+    # x1 = x * cos(theta)
+    # x2 = y * sin(theta)
+    # w = x1 + x2
+    # height = 40
+
+    # holder = box(mount_ext_width, w, height)
+    # holder = translate(holder, (0, 0, -oled_mount_depth/2))
+    # holder = rotate(holder, ( 0, oled_mount_rotation_xyz[1],  oled_mount_rotation_xyz[2]))
+    # holder = translate(holder, (
+    #     oled_mount_location_xyz[0],
+    #     oled_mount_location_xyz[1],
+    #     oled_mount_location_xyz[2]
+    # ))
+    
+    # cut = box(mount_ext_width, mount_ext_height, 2*oled_mount_depth)
+    # cut = translate(cut, (0, 0, oled_mount_depth))
+    # cut = rotate(cut, oled_mount_rotation_xyz)
+    # cut = translate(cut, (
+    #     oled_mount_location_xyz[0],
+    #     oled_mount_location_xyz[1],
+    #     oled_mount_location_xyz[2] 
+    # ))
+    # cut = union([cut, plate, shape, clip_undercut, clip_slot, oled_cutout])
+    # holder = difference(holder, [cut])
+
+    # cut2 = box(mount_ext_width, mount_ext_height+ 3, oled_mount_depth + .01)
+    # cut2 = translate(cut2, (0, 3, 0))
+    # cut2 = rotate(cut2, oled_mount_rotation_xyz)
+    # cut2 = translate(cut2,
+    #     (
+    #         oled_mount_location_xyz[0],
+    #         oled_mount_location_xyz[1],
+    #         oled_mount_location_xyz[2],
+    #     )
+    # )
+    # holder = difference(holder, [cut2])
+
+    # cut3 = box(oled_mount_width, oled_mount_height + 6, 30)
+    # cut3 = rotate(cut3, oled_mount_rotation_xyz)
+    # cut3 = translate(cut3, oled_mount_location_xyz)
+    # holder = difference(holder, [cut3])
+
+    hole = None
+    # hole = translate(hole, (10, 0, -oled_mount_depth + 2))
+    # hole = rotate(hole, (
+    #     0,
+    #     5,
+    #     oled_mount_rotation_xyz[2],
+    # ))
+    # hole = translate(hole, oled_mount_location_xyz)
+    # hole = union([shape, oled_cutout])
+    # shape = union([holder, shape])
+    # shape = difference(shape, [hole])
     return hole, shape
 
 
@@ -3988,8 +4033,8 @@ def rotary_encoder_pos_rot():
 
 def model_side(side="right"):
     print('model_right()')
-    #shape = add([key_holes(side=side)])
-    shape = union([key_holes(side=side)])
+    debug_exports = True
+    shape = key_holes(side=side)
     if debug_exports:
         export_file(shape=shape, fname=path.join(r"..", "things", r"debug_key_plates"))
     connector_shape = connectors()
@@ -4047,14 +4092,6 @@ def model_side(side="right"):
         shape = difference(shape, [hole])
         shape = union([shape, frame])
 
-    #### TESTING
-    # rotary_cutout = cylinder(6, 40)
-    # pos, rot = rotary_encoder_pos_rot()
-    # rotary_cutout = rotate(rotary_cutout, rot)
-    # rotary_cutout = translate(rotary_cutout, pos)
-    # shape = difference(shape, [rotary_cutout])
-    #### END TESTING
-
     if trackball_in_wall and (side == ball_side or ball_side == 'both') and separable_thumb:
         tbprecut, tb, tbcutout, sensor, ball = generate_trackball_in_wall()
 
@@ -4090,11 +4127,15 @@ def model_side(side="right"):
 
 
     if debug_exports:
-        thumb_test = union([thumb_shape, thumb_connector_shape, thumb_wall_shape, thumb_connection_shape])
+        thumb_test = add([thumb_shape, thumb_connector_shape, thumb_wall_shape, thumb_connection_shape])
         export_file(shape=thumb_test, fname=path.join(r"..", "things", r"debug_thumb_test_{}_shape".format(side)))
 
-    thumb_section = union([thumb_shape, thumb_connector_shape, thumb_wall_shape, thumb_connection_shape])
+    thumb_section = add([thumb_shape, thumb_connector_shape, thumb_wall_shape, thumb_connection_shape])
     thumb_section = difference(thumb_section, [union(thumb_screw_insert_holes(side=side))])
+
+    if debug_exports:
+        export_file(shape=thumb_section, fname=path.join(r"..", "things", r"debug_thumb_section".format(side)))
+
 
     has_trackball = False
     if ('TRACKBALL' in thumb_style) and (side == ball_side or ball_side == 'both'):
@@ -4131,7 +4172,7 @@ def model_side(side="right"):
             if has_trackball:
                 thumb_section = add([thumb_section, ball])
     else:
-        main_shape = union([main_shape, thumb_section])
+        main_shape = add([main_shape, thumb_section])
         if debug_exports:
             export_file(shape=main_shape, fname=path.join(r"..", "things", r"debug_thumb_test_6_shape".format(side)))
         if show_caps:
@@ -4159,9 +4200,8 @@ def model_side(side="right"):
 
     if side == "left":
         main_shape = mirror(main_shape, 'YZ')
-        thumb_section = mirror(thumb_section, 'YZ')
 
-    return main_shape, thumb_section
+    return main_shape
 
 
 # NEEDS TO BE SPECIAL FOR CADQUERY
@@ -4275,19 +4315,19 @@ def baseplate(wedge_angle=None, side='right'):
 
 def run():
 
-    mod_r, tmb_r = model_side(side="right")
+    mod_r = model_side(side="right")
     export_file(shape=mod_r, fname=path.join(save_path, config_name + r"_right"))
-    export_file(shape=tmb_r, fname=path.join(save_path, config_name + r"_thumb_right"))
 
     #base = baseplate(mod_r, tmb_r, side='right')
     base = baseplate(side='right')
     export_file(shape=base, fname=path.join(save_path, config_name + r"_right_plate"))
     export_dxf(shape=base, fname=path.join(save_path, config_name + r"_right_plate"))
 
+    print(f"symmetry: {symmetry}")
+
     if symmetry == "asymmetric":
-        mod_l, tmb_l = model_side(side="left")
+        mod_l = model_side(side="left")
         export_file(shape=mod_l, fname=path.join(save_path, config_name + r"_left"))
-        export_file(shape=tmb_l, fname=path.join(save_path, config_name + r"_thumb_left"))
 
         #base_l = mirror(baseplate(mod_l, tmb_l, side='left'), 'YZ')
         base_l = mirror(baseplate(side='left'), 'YZ')
